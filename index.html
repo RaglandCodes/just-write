@@ -1,0 +1,76 @@
+<html lang="en">
+  <head>
+    <title>Just write</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,800;1,400;1,600;1,800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" type="text/css" href="./styles.css" />
+  </head>
+  <body>
+    <div id="paper" contenteditable="true">
+      <table>
+        <tr>
+          <th>One</th>
+          <th>Two</th>
+        </tr>
+        <tr>
+          <td>One Six</td>
+          <td>Two Fix</td>
+        </tr>
+        <tr>
+          <td>One four</td>
+          <td>Three</td>
+        </tr>
+      </table>
+    </div>
+    <script>
+      const Paper = document.querySelector('#paper');
+
+      const table = document.querySelector('table');
+
+      Paper.addEventListener('keyup', (event) => {
+        const node = window.getSelection().anchorNode;
+        const currentNode = node.nodeType == 3 ? node.parentNode : node;
+        console.log(`${currentNode.textContent} <== currentNode.innerText`);
+
+        // console.dir(node);
+        // console.log('^node^');
+
+        if (currentNode.textContent === '!h1') {
+          //TODO do not replace any node.
+          // For example, do not replace if a <td>..
+          // Replace a div OK
+          console.log('replacing with h1');
+          const newNode = document.createElement('h1');
+          newNode.innerText = 'h';
+          currentNode.replaceWith(newNode);
+          newNode.focus();
+        } else if (currentNode.textContent === '!h2') {
+          console.log('replacing with h2');
+          const newNode = document.createElement('h2');
+          newNode.innerText = 'h';
+          currentNode.replaceWith(newNode);
+        } else if (currentNode.textContent === '!new-col') {
+          console.log('Adding a column');
+          console.dir(currentNode);
+        } else if (currentNode.textContent === '!new-row') {
+          currentNode.innerText = 'new-row';
+          const siblingRow = currentNode.parentNode;
+          let newRow = siblingRow.cloneNode(true);
+          if (siblingRow.tagName === 'TR') {
+            console.log('confirmed row');
+            console.dir(siblingRow);
+            console.log('^siblingRow^');
+
+            siblingRow.parentNode.insertBefore(newRow, siblingRow.nextSibling);
+            console.log(`${siblingRow.innerText} <== siblingRow.innerText`);
+            console.log(`${siblingRow.textContent} <== siblingRow.textContent`);
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
